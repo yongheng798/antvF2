@@ -1,5 +1,5 @@
 <template>
-	
+  <div></div>
 </template>
 
 <script>
@@ -7,7 +7,7 @@
 </script>
 
 <style scoped>
-	*{
-		color: red;
-	}
+* {
+  color: red;
+}
 </style>

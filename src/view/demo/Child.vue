@@ -4,6 +4,7 @@
     <div>hello world</div>
     <slot :data="data"></slot>
     <h5>我来了了了了哈哈哈</h5>
+    <p>《mod》</p>
   </div>
 </template>
 

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>常用的JS代码片段</title>
+</head>
+<body>
+    <input type="text" maxlength="">
+    <script>
+        // 1/判断一个单词是否是回文
+        function checkPalindrom(str){
+            return str === str.split('').reverse().join('');
+        }
+        console.log(checkPalindrom('manam')); //true
+
+        // 2、数组去重
+        let uniqueEs6 = function(arr){
+            return Array.from(new Set(arr));
+        }
+        
+        //3、统计一个字符串出现最多的字母
+        function findMaxDuplicateCha(str){
+            if(str.length ===1){
+                return str;
+            }
+
+            let charObj = {};
+            for(let i = 0; i < str.length; i++){
+                if(!charObj[str.charAt(i)]){
+                    charObj[str.charAt[i]] = 1;
+                }else{
+                    charObj[str.charAt[i]] +=1;
+                }
+            }
+            let maxchar = '',
+                maxvalue = 1;
+            for(var k in charObj){
+                if(charObj[k] >= maxvalue){
+                    maxchar = k;
+                    maxvalue = charObj[k]
+                }
+            }
+            return maxchar
+        } 
+        console.log(findMaxDuplicateCha('fadsfasflh'));
+    </script>
+</body>
+</html>

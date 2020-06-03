@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div class="containerBox" id="main_wrap">
+        <div class="left">
+            <div class="leftnav">
+                <ul>
+                    <li>左侧导航1</li>
+                    <li>左侧导航2</li>
+                    <li>左侧导航3</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <ul>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li class="add-new-item" onclick="addItem()"><span>添加新元素进来</span></li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="flex-inline">
+                <ul>
+                    <li><span>右侧内容布局1</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="app">
+        <input type="text" id="txt">
+        <p id="show"></p>
+    </div>
+
+    <style type="text/css">
+        html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, form, label, input, legend, table, caption, tbody, tfoot, thead, tr, th, td, textarea, article, aside, audio, canvas, figure, footer, header, mark, menu, nav, section, time, video { margin: 0; padding: 0; }
+        h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
+        article, aside, dialog, figure, footer, header, hgroup, nav, section, blockquote { display: block; }
+        ul, ol { list-style: none; }
+        img { border: 0 none; vertical-align: top; }
+        blockquote, q { quotes: none; }
+        blockquote:before, blockquote:after, q:before, q:after { content: none; }
+        table { border-collapse: collapse; border-spacing: 0; }
+        strong, em, i { font-style: normal; font-weight: normal; }
+        ins { text-decoration: underline; }
+        del { text-decoration: line-through; }
+        mark { background: none; }
+        input::-ms-clear { display: none !important; }
+        body { font: 12px/1.5 \5FAE\8F6F\96C5\9ED1, \5B8B\4F53, "Hiragino Sans GB", STHeiti, "WenQuanYi Micro Hei", "Droid Sans Fallback", SimSun, sans-serif; background: #fff; }
+        a { text-decoration: none; color: #333; }
+        a:hover { text-decoration: underline; }
+        .containerBox{
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            max-width: 1220px;
+            margin: auto;
+        }
+        .main{
+            width: 600px;
+            position: relative;
+        }
+        .left{
+            flex: 1;
+            background-color: #ccc;
+            min-height: 200px;
+        }
+        .right{
+            flex: 2;
+            background-color: azure;
+            min-height: 200px;
+        }
+        .main ul{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            height: 100;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .main ul li{
+            background-color: ivory;
+            border: 1px solid #808080;
+            width: 30%;
+            margin-bottom: 5%;
+            font-size: 20px;
+            line-height: 2;
+            text-align: center;
+        }
+        .main ul li span{
+            display: inline-flex;
+            padding: 24px;
+        }
+        .main ul li:nth-of-type(3n){
+            margin-right: 0;
+        }
+        main ul li:nth-of-type(7n){
+            margin-bottom: 0;
+        }
+        .main ul li:nth-child(2n){
+            background-color: lawngreen;
+        }
+        .main ul li.add-new-item{
+
+        }
+        .main ul li.add-new-item span{
+            position: relative;
+        }
+
+        </style>
+
+        <script>
+            'use strict' //使用严格模式
+            // 数组篇***************
+            // 返回值，都执行了方法以后的数组长度
+            var arr = [1,2,3,4];
+            arr.push(5,6,7);
+            console.log(arr);
+            arr.unshift(12,8);
+            console.log(arr);
+
+            // 模拟数组 push() 实例方法
+            Array.prototype.myPush = function(){
+                for(var i = 0; i< arguments.length; i++){
+                    //console.log(arguments[i]);
+                    this[this.length] = arguments;
+                }
+            }
+
+            arr.myPush(5,9,11);
+            // 删除 pop() shit() 无参数
+            arr.pop()
+
+            // Array.splice(开始项的下标，剪切的长度，剪切以后最后一位开始添加数据)
+            arr.splice(3, 1, 'd');
+            arr.splice(-1, 1, 'e')
+
+            // 数组排序
+            // 1 参数a,b
+            // 2、返回值： 1、负值， a就排在前面，2、负值，b就排在后面
+            // 3、0 保持不动
+            arr.sort(function(a,b){ //冒泡升排序法
+                if(a > b){
+                    return 1
+                }else{
+                    return -1
+                }
+            });
+            // 冒泡降序
+            arr.sort(function(a, b){ //冒泡升排序法
+                if(a < b){
+                    return 1
+                }else{
+                    return -1
+                }
+            });
+            arr.sort((a, b)=>{
+                if(a > b){
+                    return 1
+                }else{
+                    return -1
+                }
+                // 或者
+                return a = a> b ? 1 : -1
+                return a - b;
+            })
+            // 随机排序
+            arr.sort((a,b)=>{
+                var rand = Math.random();
+                if(rand - 0.5 > 0){
+                    return 1
+                }else{
+                    return -1
+                }
+            })
+
+            // 数组对象排序
+            var arr1 = [
+                {
+                    son: 'Jenny',
+                    age: 18
+                },
+                {
+                    son:'Jone',
+                    age: 10
+                },
+                {
+                    son:'Ben',
+                    age: 16
+                },
+                {
+                    son: 'Crytal',
+                    age: 3
+                },
+                {
+                    son: 'Lucy',
+                    age: 5
+                }
+            ];
+            arr1.sort((a,b)=>{
+                if(a.age > b.age){
+                    return 1
+                }else{
+                    return -1
+                }
+            });
+
+            // 以字符串长度
+            arr2 = ['343234','afads','433','888','9fadfafas'];
+            arr2.sort((a,b)=>{
+                if(a.length > b.length){
+                    return 1
+                }else{
+                    return -1
+                }
+            });
+
+            // 以字符长度【字节数】来排序
+            var arr3 = ['我爱你','OK', 'Hello','你说WHAT','可以'];
+            arr3.sort((a,b)=>{
+                return getBytes(a) - getBytes(b);
+            })
+            function getBytes(str){
+                var bytes = str.length;
+                for(var i = 0; i < str.length; i++){
+                    if(str.charCodeAt(i) > 255){
+                        bytes ++;
+                    }
+                }
+                return bytes;
+            }
+            var arr4 = arr.slice(-3,-2);
+            console.log(arr4);
+
+            arr3.join('-'); //分隔符
+            console.log(arr)
+            arr3.splice('-',arr3.length)
+            console.log(arr3)
+
+            // 数组去重
+            Array.prototype.unique = function(){
+                var temp = {}
+                    newArr = [];
+                for(var i = 0; i < this.length; i++){
+                    if(!temp.hasOwnProperty(this[i])){
+                        temp[this[i]]= this[i]
+                        newArr.push(this[i]);
+                    }
+                }
+                return newArr;
+            }
+            console.log(arr.unique());
+
+
+            // 字符串去重
+            String.prototype.unique = function(){
+                var temp = {},
+                    newStr = '';
+                for(var i = 0; i<this.length; i++){
+                    if(!temp.hasOwnProperty(this[i])){
+                        temp[this[i]] = this[i];
+                        newStr += this[i]
+                    }
+                }
+                return newStr
+            }
+            console.log('straafdaf5afda'.unique());
+
+            // 周一到周日
+            function test(day){
+                var weekday = [
+                    ,'Mon', 'Tue', 'Web', 'Thu', 'Fri', 'Sat','Sun'
+                ]
+
+                weekday[day] !== undefined
+                                ? console.log(weekday[day])
+                                :console.log('I don\'t konw');
+            
+            }
+            test(1);
+
+            // **************JSON
+            // 所有的编程语言都离不开的三大数据类型
+            // scalar 标量 -》字符串和数字
+            // sequence 序列 数组列表 list Array
+            // mapping 映射 键值对 键名：键值
+            // 
+            // 并列数据用逗号隔开
+            // 映射的集合用{}包裹
+            // 序列标签用 [] 包裹
+            // 键名用 : 
+            // JSON.parse()  //JSON 字符串转换成JSON对象
+            // JSON.stringify(obj) //JSON转字符串
+            // 
+
+
+            // JS实现简单的双向绑定
+            let obj = {};
+            Object.defineProperty(obj,'text',{
+                get: function(){
+                    return obj
+                },
+                set: function(newValue){
+                    document.getElementById('txt').value = newValue;
+                    document.getElementById('show');
+                }
+            })
+            document.addEventListener('keyup',function(e){
+                obj.tex = e.target.value;
+            })
+            // *********
+            /*
+            *预编译的原理
+            1、检查通篇的语法错误
+            2、解释一行，执行一行
+            3、
+            */ 
+
+            // 模块化开发*********************
+            window.onload = function(){
+                init();
+            }
+            function init(){
+                initSlider;
+                initSideBar
+            }
+            var initSlider = (function(){
+                var a = 1;
+                console.log(a);
+            })();
+            
+            var initSideBar = (function(){
+                var a = 2;
+                console.log(a);
+            })();
+
+
+            // 最早的形式
+            var namespace = {
+                header:{
+                    Jenny: {
+                        a: 1,
+                        b: 2
+                    },
+                    Ben: {
+                        a: 3,
+                        b: 4,
+                        c: 5
+                    }
+                },
+                sliderBar: {
+                    Crystal: {
+                        a: 5,
+                        b: 6
+                    }
+                }
+            }
+            with(namespace.header.Ben){
+                console.log(a);
+            }
+        </script>
+</body>
+</html>

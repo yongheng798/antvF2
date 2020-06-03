@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOW操作集合收集</title>
+</head>
+<body>
+    <div>
+        <button class="btn" onclick="test()">加载更多</button>
+        <button class="event">事件监听</button>
+        <ul>
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <button class="git" style="background:#f00">领取优惠</button>
+    </div>
+    
+
+    <div>
+        <ul class="daili">
+            <li>1</li>
+            <li>2</li>
+            <li>3</li>
+            <li>4</li>
+            <li>5</li>
+        </ul>
+        <button class="dailiBtn">添加li</button>
+    </div>
+    <script>
+
+        // 事件 + 事件的反馈 = 前端交互 交互体验
+        // 绑定方式：
+        /*1、具名方法：elem.onclick = function(){}
+        2、监听函数：elem.addEventListener(事件类型，事件处理函数，false);
+        3、事件代理： 
+        */ 
+
+        var oBtn = document.getElementsByClassName('btn')[0];
+
+        oBtn.onclick = function(){
+            this.innerHTML = '加载中';
+            this.className = 'active';
+            var self = this;
+            setTimeout(function(){
+                console.log(1);
+                self.innerHTML = '加载更多';
+                self.className = '';
+            },2000)
+        }
+        // 下面两个会执行哪一个呢？，答案是b
+        // function test(){
+        //     console.log('a');
+        // }
+        // oBtn.onclick = function(){
+        //     console.log('b');
+        // }
+        // IE9以下不兼容监听函数 W3C规范
+        var oBtn2 = document.getElementsByClassName('event')[0];
+        oBtn2.addEventListener('click', function(){
+            this.innerHTML = '加载中';
+            this.className = 'active';
+            var self = this;
+            setTimeout(function(){
+                console.log(1);
+                self.innerHTML = '加载更多';
+                self.className = '';
+            },2000)
+        });
+        // 监听多个操作
+        oBtn2.addEventListener('click', function(){
+            console.log('加载的另一个监听事件')
+        });
+        oBtn2.addEventListener('click',test2,false)
+        function test2(){
+            console.log('hello world')
+        }
+        // IE8以下的绑定方法
+        // oBtn2.attachEvent('onclick', function(){
+        //     this.innerHTML = '加载中222222';
+        //     this.className = 'active';
+        //     var self = this;
+        //     setTimeout(function(){
+        //         console.log(1);
+        //         self.innerHTML = '加载更多222222';
+        //         self.className = '';
+        //     },2000);
+        // })
+
+        // 监听多个tag事件
+            var oLi = document.getElementsByTagName('li'),
+                len = oLi.length,
+                item;
+            for(var i = 0;i < len; i++){
+                (function(i){
+                    item = oLi[i];
+                    item.addEventListener('click', function(){
+                        console.log(i);
+                    },false)
+                })(i);
+            }
+
+            addEvent(oBtn2,'click',function(){
+                console.log(111);
+            })
+            // 封装addEvent事件函数
+            function addEvent(el, type, fn){
+                if(el.addEventListener){
+                    el.addEventListener(type, fn, false)
+                }else if(el.attacheEvent){
+                    el.attacheEvent('on' + type,function(){
+                        fn.call(el);
+                    })
+                }else{
+                    el['on'+type] = fn;
+                }
+            }
+            // 解除事件函数监听器，添加啥就解除啥
+            // oBtn2.addEventListener('click', test, false)
+            //oBtn2.removeEventListener('click',test,false);
+            var oBtn3 = document.getElementsByClassName('git')[0];
+
+            // oBtn3.onclick = function(){
+            //     this.className = 'got';
+            //     this.innerHTML = '已领取';
+
+            //     this.onclick = null
+            // }
+
+            // 监听方式处理
+            oBtn3.addEventListener('click',test3, false);
+            function test3(){
+                this.className = 'got';
+                this.innerHTML = '已领取';
+                removeEventListener('click', test3, false)
+            }
+
+            // 事件委托，事件代理
+            var daili = document.getElementsByClassName('daili')[0];
+            var oDli = daili.getElementsByTagName('li');
+            var oBtnDaili = document.getElementsByClassName('dailiBtn')[0];
+            
+            daili.onclick = function(e){
+                var e = e || window.event,
+                    tar = e.target || e.srcElement,
+                    item;
+                console.log(tar.innerText);
+                for(var i = 0; i< oDli.length; i++){
+                    item = oDli[i];
+                    if(tar === item){
+                        console.log(i)
+                    }
+                }
+                // for循环如果数据一多，就太慢了
+            }
+            oBtnDaili.onclick = function(){
+                var li = document.createElement('li');
+                li.innerText = oDli.length + 1;
+                daili.appendChild(li);
+                console.log(li);
+            }
+
+            // 取事件委托的下标，建议用 indexOf
+            var index = Array.prototype.indexOf.call(oDli,tar);
+
+
+            Element.prototype.elemChildren = function(index){}
+
+            // 循环
+            let list = [3,4,5,6,7,9,11];
+            for(const key in list){
+                console.log(list[key]);
+            }
+            for(const key of list){
+                console.log(list[key])
+            }
+
+            list.forEach((value,key)=>{
+                console.log(value)
+            })
+    </script>
+
+
+<script>
+    // DOM -> Document Object Model 文档模型对象
+    // DOM 对象  也称为 宿主对象
+    // ECMAScript 有三种对象
+    // 1、本地对象 native Object
+        // Object
+        // Function
+        // Array
+        // String
+        // Number
+        // Boolean
+        // Error
+        // EvalError
+        // SyntaxError
+        // RangeError
+        // ReferenceError
+        // TypeError
+        // URIError
+        // Date
+        // RegExp
+    // 2、 内置对象 Built-in Object
+    // Gobal Math
+    // ECAM isNaN  parseInt() Number decodeURI encodeURI
+    // Infinity NaN undefined
+    // 本地对象和内置对象都是ES的内部对象
+    // 3、宿主对象 Host Object
+
+    // 幻灯片的简单写法
+    var thumItem = document.getElementsByClassName('thumb-item');
+    var sliderItem = document.getElementsByClassName('slider-item');
+
+    for(var i = 0; i < thumItem.length; i++){
+        // 采用立即执行函数方式
+        (function(j){
+            thumItem[j].onclick = function(){
+                for(var k = 0; k < thumItem.length; k++){
+                    thumItem[k].className = 'thumb-item';
+                    sliderItem[k].className = 'slider-item';
+                }
+                sliderItem[j].className += 'active';
+                this.className += 'cur';
+            }
+        })(i)
+    }
+
+    // 把上面的写法，换成插件的形式
+    ;(function(){
+        var Slider = function(opt){
+            this.sliderItem = document.getElementsByClassName(opt.sliderItem);
+            this.thumItem = document.getElementsByClassName(opt.thumItem);
+            this.bindClick()
+        }
+        Slider.prototype = {
+            bindClick: function(){
+                var slider = this.sliderItem,
+                    thumbs = this.thumItem;
+                for(var i = 0; i < thumsbs.length; i++){
+                    (function(j){
+                        thumbs[j].onclick = function(){
+                            for(var k = 0; k < thumbs.length; k++){
+                                thumbs[k].className = 'thumb-item';
+                                thumbs[k].className = 'slider-item';
+                            }
+                            this.className += ' cur';
+                            slider[j].className +=' active'
+                        }
+                    })(i)
+                }
+            }
+        }
+        window.Slider = Slider;
+    })();
+
+    // 调用
+    var slider = new Slider({
+        sliderItem: 'slider-item',
+        thumItem: 'thumb-item'
+    })
+</script>
+</body>
+</html>

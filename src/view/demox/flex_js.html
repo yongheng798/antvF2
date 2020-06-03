@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div class="containerBox" id="main_wrap">
+        <div class="left">
+            <div class="leftnav">
+                <ul>
+                    <li>左侧导航1</li>
+                    <li>左侧导航2</li>
+                    <li>左侧导航3</li>
+                </ul>
+            </div>
+        </div>
+        <div class="main">
+            <ul>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li><span>这个是flex布局的内部循环自适应1</span></li>
+                <li><span>这个是flex布局的内部循环自适应2</span></li>
+                <li><span>这个是flex布局的内部循环自适应3</span></li>
+                <li class="add-new-item" onclick="addItem()"><span>添加新元素进来</span></li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="flex-inline">
+                <ul>
+                    <li><span>右侧内容布局1</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <style type="text/css">
+        html, body, div, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, ul, li, fieldset, form, label, input, legend, table, caption, tbody, tfoot, thead, tr, th, td, textarea, article, aside, audio, canvas, figure, footer, header, mark, menu, nav, section, time, video { margin: 0; padding: 0; }
+        h1, h2, h3, h4, h5, h6 { font-size: 100%; font-weight: normal }
+        article, aside, dialog, figure, footer, header, hgroup, nav, section, blockquote { display: block; }
+        ul, ol { list-style: none; }
+        img { border: 0 none; vertical-align: top; }
+        blockquote, q { quotes: none; }
+        blockquote:before, blockquote:after, q:before, q:after { content: none; }
+        table { border-collapse: collapse; border-spacing: 0; }
+        strong, em, i { font-style: normal; font-weight: normal; }
+        ins { text-decoration: underline; }
+        del { text-decoration: line-through; }
+        mark { background: none; }
+        input::-ms-clear { display: none !important; }
+        body { font: 12px/1.5 \5FAE\8F6F\96C5\9ED1, \5B8B\4F53, "Hiragino Sans GB", STHeiti, "WenQuanYi Micro Hei", "Droid Sans Fallback", SimSun, sans-serif; background: #fff; }
+        a { text-decoration: none; color: #333; }
+        a:hover { text-decoration: underline; }
+        .containerBox{
+            display: flex;
+            flex-wrap: wrap;
+            box-sizing: border-box;
+            max-width: 1220px;
+            margin: auto;
+        }
+        .main{
+            width: 600px;
+            position: relative;
+        }
+        .left{
+            flex: 1;
+            background-color: #ccc;
+            min-height: 200px;
+        }
+        .right{
+            flex: 2;
+            background-color: azure;
+            min-height: 200px;
+        }
+        .main ul{
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            height: 100;
+            align-items: center;
+            justify-content: space-around;
+        }
+        .main ul li{
+            background-color: ivory;
+            border: 1px solid #808080;
+            width: 30%;
+            margin-bottom: 5%;
+            font-size: 20px;
+            line-height: 2;
+            text-align: center;
+        }
+        .main ul li span{
+            display: inline-flex;
+            padding: 24px;
+        }
+        .main ul li:nth-of-type(3n){
+            margin-right: 0;
+        }
+        main ul li:nth-of-type(7n){
+            margin-bottom: 0;
+        }
+        .main ul li:nth-child(2n){
+            background-color: lawngreen;
+        }
+        .main ul li.add-new-item{
+
+        }
+        .main ul li.add-new-item span{
+            position: relative;
+        }
+
+        </style>
+
+        <script>
+            'use strict'
+            var addElement = document.getElementsByClassName('add-new-item');
+            var addLi = document.createElement('li');
+            function addItem(){
+                addElement.insertBefore(addLi, addElement);
+            }
+            //addElement.addEventListener('click', addItem);
+            var mainElement = document.getElementById('main_wrap');
+            mainElement.classList.add('myTestClass')
+            // 事件代理
+            var ul = document.querySelector('.main ul');
+            ul.addEventListener('click', function(event){
+                if(event.target.tagName.toLwerCase() ==='li'){
+                    event.stopPropagation()
+                }
+            },true)
+            
+            // 给html添加样式
+            addElement.setAttribute(
+                'style',
+                'background-color: red' + 'border: 1px solid black'
+            )
+
+            var observer = new MutationObserver(function(mutations,observer){
+                mutations.forEach(function(mutation){
+                    console.log(mutation);
+                })
+            })
+
+            function preventEvent(event){
+                if(event.cancelable){
+                    event.preventDefault();
+                }else{
+                    console.warn('this event couldn\'t be canceled')
+                    console.dir(event)
+                }
+                if(event.defaultPrevented){
+                    console.log('该事件已经取消了')
+                }
+            }
+            // 同源策略  是指 协议相同，域名相同，端口相同
+
+
+              let m=this;
+                let arr1=[
+                   {id: 0, name:"xiaomin"},
+                    {id: 2, name:"xiaohehi"},
+                    {id: 3, name:"xiaoli"}
+                ];
+                var newArr = []
+                let arr2 = arr1.filter(function(v,i) {
+
+                  newArr.push(arr1[i].name)
+                  console.log(newArr)
+                  return newArr
+                })   
+                console.log(new Set(newArr))
+
+                function test(){
+                    var arr = [];
+                    for(i = 0; i < 10; i++){
+                        arr[i] = function(){
+                            document.write(i + '')
+                        }
+                    }
+                    return arr;
+                }
+                var myArr = test();
+                
+
+                // 对象的增删改
+                var teacher = {
+                    name: '张三',
+                    age: 17,
+                    sex: 'fal',
+                    weight: 130,
+                    teach: function(){
+                        console.log('教学中');
+                    },
+                    smoke: function(){
+                        this.weight --;
+                        console.log('抽烟中')
+                    },
+                    eat: function(){
+                        this.weight ++;
+                        console.log('吃多了就变胖')
+                    }
+                }
+                // 增加属性
+                teacher.address = '深圳';
+                // 增加方法
+                teacher.drink = function(){
+                    console.log('喝酒咯');
+                }
+                // 删除属性
+                delete teacher.address;
+                // 删除方法  和属性是一样的
+                delete teacher.smoke;
+
+                // 查 用对象里面的方法
+                teacher.tech();
+
+                // 班级同学的增删改查
+                var attendace = {
+                    students: [],
+                    total: 6,
+                    join: function(name){
+                        this.students.push(name);
+                        if(this.students.length ===this.total){
+                            console.log(name + '到齐了')
+                        }else{
+                            console.log(name + '学生未到齐')
+                        }
+                        console.log(this.students.name);
+                    },
+                    leave: function(name){
+                        var idx = this.students.indexOf(name);
+                        if(idx !==-1){
+                            this.students.splice(idx,1);
+                        }
+                        console.log(name + '早退了')
+                        console.log(this.students);
+                    },
+                    classOver: function(){
+                        this.students = [];
+                        console.log('下课了');
+                    }
+                }
+                attendace.join('张三');
+                attendace.join('李四');
+                attendace.join('王五');
+                
+                // 构造函数
+                function Teachers(){
+                    this.name = '张三';
+                    this.sex = '男';
+                    this.smoke = function(){
+                        console.log('抽大烟了');
+                    }
+                }
+                // 实例化
+                var teacher1 = new Teachers();
+                console.log(teacher1);
+
+                var teacher2 = new Teachers();
+                teacher2.name = '李四';
+
+                // 构造函数传参
+                function Teachers2(name,sex,weight,scource) {
+                    this.name = name;
+                    this.sex = sex;
+                    this.weight = weight;
+                    this.scource;
+                    this.smoke = function(){
+                        console.log('抽大烟了');
+                    };
+                    this.eat = function(){
+                        console.log('吃 ');
+                    }
+                }
+                // 这么写，太多参数了？？
+                function Teachers3(opt){
+                    this.name = opt.name;
+                    this.sex = opt.sex;
+                    this.weight = opt.weight;
+                    this.scource = opt.scource;
+                }
+                var teachers2_1 = new Teachers2({
+                    name: '张三',
+                    sex: '男',
+                    weight: 175,
+                    scource: 'Javascript'
+                });
+                var teachers3_1 = new Teachers3({
+                    name: '张三',
+                    sex: '男',
+                    weight: 175,
+                    scource: 'Javascript'
+                });
+
+                // 继续
+                function Car(color,brand){
+                    this.color = color;
+                    this.brand = brand;
+                    this.drive = function(){
+                        console.log('i am driving');
+                    }
+                }
+                var car1 = new Car('red','BMW');
+                car1.color;
+                car1.brand;
+                car1.drive();
+
+
+                // 隐式的this
+                function Car1(color,brand){
+                    me = {};
+                    me.color = color;
+                    me.brand = brand;
+                    return me;
+                }
+                var car2 = Car1('red','BMW');
+                
+
+                function test(){
+                    var obj = {
+                        name: '蓝色轨迹',
+                        color: 'blue'
+                    }
+                    return obj;
+                }
+                var obj1 = test();
+                
+                function Compute(){
+                    var args = arguments,
+                        res;
+                    this.plus = function(){
+                        res = 0;
+                        loop('add', res);
+                        console.log(res);
+                    };
+                    this.times = function(){
+                        res = 1;
+                        loop('mull', res);
+                        console.log(res);
+                    };
+                    function loop(method,res){
+                        for(var i = 0; i< args.length; i++){
+                            var item = args[i];
+                            if(method === 'add'){
+                                res += item
+                            }else if(method === 'mul'){
+                                res *= item;
+                            }
+                        }
+                    }
+                }
+
+                //var compute = new Compute(2, 4, 6);
+                var compute = new Compute();
+                compute.plus(2, 4, 6);
+                compute.times(3, 5, 7);
+
+                // 优化代码
+                var res2 = 0;
+                this.plus = function(){
+                    loop(arguments, 'add', res);
+                }
+                this.times = function(){
+                    res = 1;
+                    loop(arguments, 'mul', res);
+                }
+
+                function loop(args, method, res){
+                    for(var i = 0; i < args.length; i++){
+                        var item = args[i];
+                        if(method ==='add'){
+                            res += item;
+                        }else if(method === 'mul'){
+                            res *= item;
+                        }
+                    }
+                    console.log(res);
+                    return res;
+                }
+
+                // 购车服务
+                function Car2(opt){
+                    this.brand = opt.brand;
+                    this.color = opt.color;
+                    this.displacement = opt.displacement;
+                }
+
+                function Person(opt){
+                    this.name = opt.name;
+                    this.age = opt.age;
+                    this.income = opt.income;
+                    this.selectCar = function(){
+                        var myCar = new Car2(opt.carOpt);
+                        console.log(`${this.name}挑选了一辆排量为${myCar.displacement}的${myCar.color} ${myCar.brand}`);
+                    }
+                }
+
+                var jone = new Person({
+                    name: '陈品富',
+                    age: 29,
+                    income: '20K',
+                    carOpt:{
+                        brand: '马自达',
+                        color: 'red',
+                        displacement: '20'
+                    }
+                });
+
+                jone.selectCar();
+
+                // 模拟对象的链式作用
+                var sched = {
+                    wakeup: function() {
+                        console.log('Running');
+                        return this;
+                    },
+                    morning: function(){
+                        console.log('going shopping');
+                    },
+                    nonn: function(){
+                        console.log('Having a rest');
+                        return this;
+                    },
+                    afternoon: function(){
+                        console.log('studying');
+                        return this;
+                    },
+                    evening: function(){
+                        console.log('walking');
+                        return this;
+                    },
+                    night: function(){
+                        console.log('sliepping');
+                        return this;
+                    }
+                }
+                // 我想链式操作,就要把方法return this传出去
+                sched.wakeup().morning().nonn().afternoon();
+
+                // 对象属性的拼接
+                var myLang = {
+                    No1: 'HTML',
+                    No2: 'CSS',
+                    No3: 'JavaScript',
+                    myStudyingLang: function(num){
+                        console.log(this['No' + num]);
+                    }
+                }
+                myLang.myStudyingLang(1);
+
+                // 对象的枚举、遍历
+                var car3 = {
+                    brand: 'Benz',
+                    color: 'red',
+                    displacement: '3.0',
+                    lang: '5',
+                    width: 2.5
+                }
+
+                for(var key in car3){
+                    console.log(`${key}: ${car3[key]}`);
+                }
+
+                // 数组的遍历
+                var Arr1 = [1, 2, 3, 4, 5];
+                for(var i in Arr1){
+                    console.log(Arr1[i])
+                }
+
+                // 原型链的 hasOwnproperty
+                function Car3(){
+                    this.brand = 'Benz';
+                    this.color = 'red';
+                    this.displacement = '3.0'
+                }
+                car3.prototype = {
+                    height: 1.2,
+                    whell: 4
+                }
+                var myCar1 = new Car3();
+                for(var key in myCar1){
+                    if(myCar1.hasOwnProperty(key)){
+                        console.log(myCar1[key]);
+                    }
+                }
+
+                // 判断对象是否为构造函数 intanceof
+                myCar1 instanceof Car3  //true
+                
+                // 立即执行函数 IIFE   immediately-invoked function expression
+                (function(){
+
+                })()
+
+                // W3C建议
+                (function(a,b){
+                    console.log(a+b);
+                }(2,4))
+
+                // call 和 apply的区别
+                function Car3(brand,color){
+                    this.brand = brand;
+                    this.color = color;
+                }
+                var newCar = {};
+                Car3.call(newCar,'Benz','red');
+                Car3.apply(newCar,['Benz','red']);//apply需要[];
+                console.log(newCar);
+
+
+                // 举例   
+                function Compute(){
+                    this.plus = function(a, b){
+                        console.log(a+b);
+                    }
+                    this.minus = function(a, b){
+                        console.log(a-b)
+                    }
+                }
+                function FullCompute(){
+                    Compute.apply(this);//借用上面的方法
+                    this.mul = function(a,b){
+                        console.log(a*b);
+                    }
+                    this.div = function(a,b){
+                        console.log(a/b)
+                    }
+                }
+                var computes = new FullCompute();
+                computes.plus(1,2);
+                computes.minus(1,2)
+                computes.mul(1,2)
+                computes.div(1,2)
+
+                // apply应用 2  apply正常是传 数组参数，call是直接传参
+                // bind 改变this指向后返回一个新的函数，不执行
+                function Car4(brand,color,displacement){
+                    this.brand = brand;
+                    this.color = color;
+                    this.displacement = displacement;
+                }
+                function Person(opt){
+                    Car4.apply(this,[opt.brand,opt.color,opt.displacement]);
+                    this.name = opt.name;
+                    this.age = opt.age;
+                    this.say = function(){
+                        console.log(`年龄${this.age} 岁 姓名为 ${this.name} 买了一辆 ${this.info()}`)
+                    }
+                }
+                var p1 = new Person({
+                    brand: '奔驰',
+                    color: '红色',
+                    displacement: '3.0',
+                    name: '张三',
+                    age: 25
+                })
+                p1
+
+                // callee 与 caller
+                function test(a,b,c){
+                    console.log(arguments.callee.length);
+                    console.log(arguments.callee);
+                    console.log(test.length)
+                    function test2(){
+                        console.log(arguments.callee)
+                    }
+                    test2();
+                }
+                test(1,2)
+
+                // 递归
+                function sum(n){
+                    if(n <= 1){
+                        return 1
+                    }
+                    return n + sum(n-1);
+                }
+                sum(10);
+
+                // 用 arguments 的立即执行函数
+                var sum = (function(n){
+                    if(n <=1){
+                        return 1
+                    }
+                    return n + arguments.callee(n-1)
+                })(100);
+
+                // 
+                test1();
+                function test1(){
+                    test2()
+                }
+                function test2(){
+                    console.log(test2.caller);
+                }
+                
+
+                // call apply bind 区别
+                var p1 = {
+                    name: '张三',
+                    bobby: this.bobby,
+                    play: function(sex, age){
+                        console.log(`年龄为 ${age} 岁，性别为 ${sex}的 ${this.name} 喜欢 ${this.bobby}`)
+                    }
+                }
+                var p2 = {
+                    name:'李四',
+                    hobby: '踢足球'
+                }
+                p1.play.call(p2, '男', 20);
+                p1.play.apply(p2,['男',20]);
+                var fn = p1.play.bind(p2,'男',20);
+
+                // JS编程特点  函数式编程和面向对象编程的混编
+                // 可扩展性
+                // 
+                // 优点： 编程灵活，易学
+                // 缺点  不可控
+
+                // 复杂的this call apply bind
+
+                // 函数式编程
+                // 优点 易读 易维护
+                // 概念 函数是第一类对象，不依赖任何其他对象独立存在
+
+                // 纯函数
+                // 相同的输入得到相同的输出，不依赖且不影响尾部环境也不产生任何副作用
+                
+
+
+                // 原型和原型链
+                function Handphone(color, brand){
+                    this.color = color
+                    this.brand = brand
+                }
+                Handphone.prototype.rom = '64G'
+                Handphone.rem = '6G'
+                Handphone.prototype = {
+                    rom: '64G',
+                    ram: '6G',
+                    screen: '18:9',
+                    system: 'Android',
+                    call: function(){
+                        console.log('I am calling somebody');
+                    }
+                }
+
+                var hp1 = new Handphone('RED','小米');
+                var ph2 = new Handphone('black','华为');
+
+                console.log(hp1);
+                console.log(ph2);
+                console.log(Handphone.prototype);
+
+                // __proto__原型链的理解
+                Car.prototype.name = 'Benz';
+                function Car(){}
+                // 赋值
+                Car.prototype.name = 'Mazda1'
+                var car = new Car();
+                Car.prototype.name = 'Mazda2'
+                Car.prototype = {
+                    name:'hello world'
+                }
+                console.log(car);
+                // __proto__是实例化之后的，所以car的名字是 Benz
+                // function Car(){
+                //     var this = {
+                //         __proto__: Car.prototype = {
+                //             name: 'Benz'
+                //         }
+                //     }
+                // }
+                
+                // 原型链的继承
+                Professor.prototype.tSkill = 'JAVA';
+                function Professor(){
+
+                }
+                var professor = new Professor();
+                
+                Teacher.prototype = professor;
+                function Teacher(){
+                    this.mSkill = 'JS/JQ';
+                    this.success = {
+                        alibaba: '28',
+                        tencent: '30'
+                    }
+                    this.students = 500;
+                }
+                var teacher = new Teacher();
+                
+                Student.prototype = teacher;
+                function Student(){
+                    this.pSkill = 'HTML/CSS';
+                }
+                var student = new Student();
+                console.log(student);
+                console.log(student.success);
+
+                student.success.baidu = '100';//赋值到原型上
+                student.success.alibaba = '29'; //赋值更改
+                console.log(teacher,student);
+                Student.students++;
+                console.log(teacher,student);
+
+                // 区分原型链的this
+                function Car5(){
+                    this.brand = 'Benz';
+                }
+                Car5.prototype = {
+                    brand: 'Mazda',
+                    intro: function(){
+                        console.log('我是'+this.brand+'车')
+                    }
+                }
+                var car5 = new Car5();
+                car5.intro();
+                Car5.brand;
+
+                // Object.caret(对象，null) 创建对象
+                var test2 = {
+                    num: 2
+                }
+                function Obj(){
+
+                }
+                Obj.prototype.num = 1;
+                var obj1 = Object.create(test2);
+                var obj2 = new Obj();
+                console.log(obj1);
+                console.log(obj2);
+
+                // 立即执行函数开发插件
+                ;(function(){
+                    console.log(1)
+                })();
+
+                // 模拟插件开发
+                ;(function(){
+                    var ComputeDemo = function(){}
+                    ComputeDemo.prototype = {
+                        plus: function(a, b){
+                            return a + b;
+                        },
+                        minus: function(a, b){
+                            return a - b;
+                        },
+                        mul: function(a, b){
+                            return a * b
+                        },
+                        div: function(a, b){
+                            return a / b;
+                        }
+                    }
+                    window.ComputeDemo = ComputeDemo;
+                })();
+                // 调用插件
+                var compute2 = new ComputeDemo();
+                var res = compute2.mul(2, 4);
+                console.log(res);
+
+                // 原型链的继承-------------- apply或者call借用
+                function Parent(name, mSkill){
+                    this.name = name;
+                    this.mSkill = mSkill;
+                }
+                Parent.prototype = {
+                    pSkill: 'JS/JQ/JAVA'
+                }
+
+                function Son1(name, mSkill, age, major){
+                    Parent.apply(this,[name,mSkill]);
+                    this.age = age;
+                    this.major = major;
+                }
+                var son1 = new Son1('Mr. Chen','JS/JQ',18,'computer');
+                console.log(son1);
+
+
+        // 圣杯模式  之原型链的继承*************
+                //父类
+        function Teacher(){}
+        Teacher.prototype.name = "teacher";
+        //子类
+        function Student(){}
+        Student.prototype.age = 18;
+        //原型继承调用
+        inherit(Student,Teacher);
+
+        let s = new Student();
+        let t = new Teacher();
+
+        /*
+        *
+        圣杯模式原型继承封装
+        @param Target 需要继承的子类
+        @param Origin 被继承的父类 
+        */
+        function inherit(Target,Origin){
+            //创建中间层构造函数
+            function Buffer(){}
+            //把被继承父类的原型付给中间层构造函数
+            Buffer.prototype = Origin.prototype;
+            //把实例化的中间层构造函数生成的对象付给需要继承的目标类
+            Target.prototype = new Buffer();
+            //目标类构造函数指向欢原
+            Target.prototype.constructor = Target;
+            //定义目标类从哪继承
+            Target.prototype.super_class = Origin;
+        }
+        console.log(s,t);
+
+        // 雅虎当年使用的写法 立即执行函数+圣杯模式
+        var inherit = (function(){
+            var Buffer = function(){}
+            return function(Target, Origin){
+                Buffer.prototype = Origin.prototype;
+                Target.prototype = new Buffer();
+                Target.prototype.constructor = Target;
+                Target.prototype.super_class = Origin;
+            }
+        })();
+        Teacher5.prototype.name = 'Mr. Zhang';
+        function Teacher5(){}
+        function Student(){}
+        inherit(Student,Teacher5);
+        var s = new Student()
+        var t = new Teacher5();
+
+
+        // 企业模块化开发*************************
+        window.onload =function(){
+            init();
+        }
+        function init(){
+            console.log(initFB(100));
+            console.log(initCd(500));
+        };
+        var initFB = (function(){
+            // 返回值函数
+            function fb(n){
+                if(n <= 0){
+                    return 0;
+                }
+                if(n <= 2){
+                    return 1;
+                }
+                return fb(n - 1) + fb(n-2)
+            }
+            return fb;
+        })();
+        var initCd = (function(){
+            // 匿名式函数
+            function div(n){
+                var arr = [];
+                for(var i = 0; i <= n; i++){
+                    if(i %3 ===0 || i % 5 ===0 || i % 7 ===0){
+                        arr.push(i);
+                    }
+                }
+                return arr;
+            }
+            return div;
+        })();
+        
+        
+        // 判断数组的三种方法
+        var arr = [];
+        // 构造函数判断
+        console.log(arr.constructor);
+        // 类型判断
+        console.log(arr instanceof Array);
+        // 对象改变this判断
+        console.log(Object.prototype.toString.call(arr) ==='[object Array]'); 
+        // 可以缓存起来
+        var str = Object.prototype.toString,
+            trueTip = '[object Array]';
+        if(str.call(arr) === trueTip){
+            console.log('是数组')
+        }else{
+            console.log('不是数组')
+        }
+
+
+        // this 函数内部的this
+        function testThis(b){
+            this.d = 3; //等同于 window.d = 3;
+            var a = 1;
+            function c(){}
+        }
+        testThis(123);
+        console.log(this.d);
+
+        // *******************this apply call
+        function Persion2(name, age){
+            this.name = name;
+            this.age = age;
+        }
+        function Programmer(name, age){
+            Persion2.apply(this,[name, age]);
+            this.work = 'Programming'
+        }
+        var p2 = new Programmer('张三',18);
+        console.log(p2);
+
+        // 封装 typeof
+        function myTypeof(val){
+            var type = typeof(val)
+            var toStr = Object.prototype.toString;
+            var res = {
+                '[object Array]': 'array',
+                '[object Object]': 'object',
+                '[object Number]': 'object number',
+                '[object String]': 'object string',
+                '[object Boolean]': 'object boolean'
+            }
+            if(val===null){
+                return 'null'
+            }else if(type === 'object'){
+                var ret = toStr.call(val);
+                return res[ret];
+            }else{
+                return type;
+            }
+        }
+        console.log(myTypeof(1))
+        console.log(myTypeof("1"));
+        // ....
+
+        // 对象的拷贝、复制、克隆 clone
+        Object.prototype.num = 1;
+        var person1 = {
+            name:'张三',
+            age: 18,
+            sex: 'male',
+            height: 175,
+            weight: 125,
+            son: {
+                first: 'Jenney',
+                second: 'Lucy',
+                third: 'Jone'
+            },
+            children: {
+                first:{
+                    name: '大一',
+                    age: 17
+                },
+                second: {
+                    name: '小二',
+                    age: 15
+                },
+                third:{
+                    name: '老三',
+                    age: '12'
+                }
+            },
+            // 对象
+            car: ['Benz','Mazda']
+        }
+        console.log(person1);
+        // 浅拷贝 方法1
+        var person2 = {};
+        for(var key in person1){
+            person2[key] = person1[key];
+        }
+        // 优化方法1成函数
+        function clone(origin, target){
+            var tar = target || {};
+            for(var key in origin){
+                if(origin.hasOwnProperty(key)){
+                    tar[key] = origin[key]
+                }
+            }
+            return tar;
+        }
+        person2.name = '李四';
+
+        var person4 = clone({},person1);
+        person4.name = '王五';
+        // 用ES6解决 方法2
+        var person3 = {};
+        person3 = Object.assign(person3,person1)
+        console.log(person1, person2,person3,person4);
+
+        // 对象的深拷贝***************
+        function deepClone(origin, target){
+            var target = target || {},
+                toStr = Object.prototype.toString,
+                arrType = '[object Array]';
+            // 遍历key值
+            for(var key in origin){
+                if(origin.hasOwnProperty([key])){
+                    if(typeof(origin[key]) === 'object' && origin[key] !==null){
+                        if(toStr.call(origin[key] === arrType)){
+                            target[key] = []
+                        }else{
+                            target[key] = {};
+                        }
+                    }
+                    deepClone(origin[key], target[key]);
+                }else{
+                    target[key] = origin[key];
+                }
+            }
+            return target;
+        }
+
+        var person5 = deepClone({}, person1);
+        console.log(person5);
+
+        // 用JSON 拷贝对象，但是JSON数据的不带有方法的
+        var person6 = JSON.parse(JSON.stringify(person1));
+        </script>
+</body>
+</html>

@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="图例-自定义带交互的图例">
+    <title>F2 图表组件库 - AntV</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+
+</head>
+<body>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.4.2/f2.min.js"></script>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/lodash-4.17.4.min.js"></script>
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<!-- 在 PC 上模拟 touch 事件 -->
+<!-- <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script> -->
+
+  <div class="chart-wrapper">
+    <div class="f2-tooltip">
+      <span></span>
+      <span></span>
+    </div>
+    <canvas id="mountNode" style="width:100%; height: 520px;"></canvas>
+  </div>
+  <script>
+  var data = [{
+    name: '3-1',
+    score: 282,
+    avgScore: 294
+  }, {
+    name: '3-2',
+    score: 208,
+    avgScore: 41.6
+  }, {
+    name: '3-3',
+    score: 186,
+    avgScore: 946.5
+  }, {
+    name: '3-4',
+    score: 184,
+    avgScore: 30.67
+  }, {
+    name: '3-5',
+    score: 177,
+    avgScore: 44.25
+  }, {
+    name: '3-6',
+    score: 150,
+    avgScore: 50
+  }, {
+    name: '3-7',
+    score: 148,
+    avgScore: 24.67
+  }, {
+    name: '3-8',
+    score: 138,
+    avgScore: 34.5
+  }, {
+    name: '3-9',
+    score: 130,
+    avgScore: 32.5
+  }, {
+    name: '3-10',
+    score: 128,
+    avgScore: 32
+  }, {
+    name: '3-11',
+    score: 127,
+    avgScore: 62.5
+  }];
+
+  var legendItems = [{
+    name: '逾期60+贷款',
+    marker: 'square',
+    fill: '#6195FF',
+    checked: true
+  },
+  {
+    name: '逾期60占比',
+    marker: 'square',
+    // marker: function marker(x, y, r, ctx) {
+    //   ctx.lineWidth = 1;
+    //   ctx.strokeStyle = ctx.fillStyle;
+    //   ctx.moveTo(x - r - 3, y);
+    //   ctx.lineTo(x + r + 3, y);
+    //   ctx.stroke();
+    //   ctx.arc(x, y, r, 0, Math.PI * 2, false);
+    //   ctx.fill();
+    // },
+    fill: '#f9bb4c',
+    checked: true
+}
+];
+
+  function findLegendItem(name) {
+    var index = void 0;
+    for (var i = 0; i < legendItems.length; i++) {
+      if (legendItems[i].name === name) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  }
+
+  var chart = new F2.Chart({
+    id: 'mountNode',
+    pixelRatio: window.devicePixelRatio,
+    padding: ['150', 'auto', '50', 'auto'],
+    width:355,
+    height:296
+  });
+  var alisaData = {
+    score: {
+      alias: '逾期60+贷款',//别名
+      tickCount: 5,//坐标轴刻度数
+      //ticks: [0, 500, 1000, 1500, 2000],
+      //range: [0,2000] //输出数据的范围，数值类型的默认值为 [0, 1]
+    },
+    avgScore: {
+      //ticks: [0, 0.5, 1.0, 1.5, 2.0],
+      tickCount: 5,
+      alias: '逾期60占比',
+      //range: [0,200] //输出数据的范围，数值类型的默认值为 [0, 1]
+    }
+  };
+
+  chart.source(data, alisaData);
+
+    // ----- 自定义 shape ------
+    var Shape = F2.Shape;
+    var Util = F2.Util;
+    var Global = F2.Global;
+  // 自定义左右侧数据
+  function getRectRange(points, step) {
+    var xValues = [];
+    var yValues = [];
+    for (var i = 0, len = points.length; i < len; i++) {
+      var point = points[i];
+      xValues.push(point.x - step);
+      yValues.push(point.y);
+    }
+    var xMin = Math.min.apply(null, xValues);
+    var yMin = Math.min.apply(null, yValues);
+    var xMax = Math.max.apply(null, xValues);
+    var yMax = Math.max.apply(null, yValues);
+
+    return {
+      x: xMin,
+      y: yMin,
+      width: xMax - xMin,
+      height: yMax - yMin
+    };
+  }
+
+  // 左侧柱子
+  Shape.registerShape('interval', 'left', {
+    draw: function draw(cfg, container) {
+      var points = this.parsePoints(cfg.points);
+      var style = Util.mix({
+        fill: cfg.color
+      }, Global.shape.interval, cfg.style);
+
+      var rectCfg = getRectRange(points, cfg.size); // cfg.size 对应 .size(25)
+
+      return container.addShape('rect', {
+        className: 'interval',
+        attrs: Util.mix(rectCfg, style)
+      });
+    }
+  });
+  // 右侧柱子
+  Shape.registerShape('interval', 'right', {
+    draw: function draw(cfg, container) {
+      var points = this.parsePoints(cfg.points);
+      var style = Util.mix({
+        fill: cfg.color
+      }, Global.shape.interval, cfg.style);
+      var rectCfg = getRectRange(points, -cfg.size / 2); // cfg.size 对应 .size(25
+
+      return container.addShape('rect', {
+        className: 'interval',
+        attrs: Util.mix(rectCfg, style)
+      });
+    }
+  });
+
+
+
+
+
+  // 自定义图例内容以及交互行为
+  chart.legend({
+    custom: true,
+    align: 'center',
+    itemWidth: null, // 图例项按照实际宽度渲染
+    position: 'bottom',
+    items: legendItems,
+  });
+  // tooltip 和图例的联动
+  chart.tooltip({
+    showTitle: true, //显示tooltip内容框
+    layout: 'vertical',
+    //showCrosshairs: false, //是否显示辅助线
+    //custom: true, // 自定义 tooltip 内容框
+    snap: true, // 是否将辅助线准确定位至数据点
+    background: {
+      radius: 3,
+      fill: 'rgba(70,74,86,0.9)',
+      padding: [ 6, 10 ]
+    }, // tooltip 内容框的背景样式
+    titleStyle: {
+      fontSize: 14,
+      fill: '#fff',
+      textAlign: 'start',
+      textBaseline: 'top'
+    }, // tooltip 标题的文本样式配置，showTitle 为 false 时不生效
+    nameStyle: {
+      fontSize: 12,
+      fill: 'rgba(255,255,255,.7)',
+      textAlign: 'start',
+      textBaseline: 'middle'
+    }, // tooltip name 项的文本样式配置
+
+    custom: true,
+    showCrosshairs: false,
+    onChange: function onChange(ev) {
+      var tooltipEl = $('.f2-tooltip');
+      var currentData = ev.items[0];
+      var text = currentData.value;
+      tooltipEl.html(`<h3>${currentData.origin.name}</h3>
+                      <p><label>${currentData.origin.score}</label><span>逾期60+贷款</span></p>
+                      <p><label>${currentData.origin.avgScore}</label><span>逾期60占比</span></p>`);
+
+      tooltipEl.css({
+        opacity: 1,
+        left: canvasOffsetLeft + currentData.x - tooltipEl.outerWidth() / 2 + 'px',
+        top: canvasOffsetTop + currentData.y - tooltipEl.outerHeight() - 15 + 'px'
+      });
+    },
+    onHide: function onHide() {
+      var tooltipEl = $('.f2-tooltip');
+      tooltipEl.css({
+        opacity: 0
+      });
+    }
+
+  });
+
+    // 辅助单位
+    chart.guide().text({
+        position: ['min', 'max'],
+        content: '亿',
+        style: {
+        textBaseline: 'middle',
+        textAlign: 'start'
+        },
+        offsetY: -23,
+        offsetX: -23
+    });
+    
+    // 坐标轴配置
+    chart.axis({
+      grid: {
+        lineDash: null,
+        stroke: '#4c4d50',
+        lineWidth: 1
+      },
+      line: {
+        lineWidth: 1,
+        stroke: '#4c4d50',
+        top: true, // 展示在最上层
+      }, // 设置坐标轴线的样式，如果值为 null，则不显示坐标轴线，图形属性
+      labelOffset: 20, // 坐标轴文本距离轴线的距离
+      tickLine: {
+      lineWidth: 1,
+      stroke: '#4c4d50',
+      length: 5, // 刻度线长度
+    }, // 坐标点对应的线，null 不显示，图形属性
+    })
+
+
+    var canvasOffsetTop = $('#mountNode').position().top;
+  var canvasOffsetLeft = $('#mountNode').position().left;
+
+  chart.interval().position('name*score').color('#6195FF').size(10).shape('left');
+  chart.line({sortable: false}).position('name*avgScore').color('#f9bb4c').size(2).shape('right');
+//   chart.point().position('name*avgScore').size(3).style({
+//     fill: '#f00',
+//     stroke: '#fff',
+//     lineWidth: 1
+//   });
+  chart.render();
+</script>
+
+
+<style>
+  .chart-wrapper {
+    position: relative;
+  }
+  .f2-tooltip {
+    /* -moz-box-shadow: 1px 1px 0.5px 0.5px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 1px 1px 0.5px 0.5px rgba(0, 0, 0, 0.3);
+    box-shadow: 1px 1px 0.5px 0.5px rgba(0, 0, 0, 0.3); */
+    position: absolute;
+    z-index: 99;
+    background-color: rgba(70,74,86,.9);
+    padding: 10px;
+    border-radius: 6px;
+    text-align: left;
+    width: 120px;
+    opacity: 0;
+  }
+  /* .f2-tooltip:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid rgba(70,74,86,.9);
+    position: absolute;
+    left: 50%;
+    margin-left: -6px;
+    bottom: -8px;
+  } */
+  .f2-tooltip h3{ 
+    line-height: 18px;
+    color: rgba(255,251,248,.7);
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+    padding: 0;
+    }
+    .f2-tooltip p{ 
+      position: relative;
+      line-height: 16px;
+      margin: 0;
+      padding: 0;
+      }
+  .f2-tooltip p span {
+    display: block;
+    color: rgba(255,251,248,.7);
+  }
+  .f2-tooltip p span:nth-child(1) {
+    font-size: 11px !important;
+  }
+  .f2-tooltip p span:nth-child(2) {
+    font-size: 13px !important;
+  }
+  .f2-tooltip p label {
+    display: inline-block;
+    color: #fff;
+    font-size: 13px !important;
+    float: right;
+  }
+  </style>
+</body>
+</html>

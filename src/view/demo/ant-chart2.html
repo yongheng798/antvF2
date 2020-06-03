@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="柱状图平移">
+    <title>F2 图表组件库 - AntV</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+    
+</head>
+<body>
+<script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+<script src="https://unpkg.com/@antv/f2@3.4.2/dist/f2-all.min.js"></script>
+
+<script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+<!-- 在 PC 上模拟 touch 事件 -->
+<script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+  <div class="chart-wrapper">
+    <canvas id="mountNode"></canvas>
+  </div>
+
+  <div class="class"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+<script>
+  function formatNumber(n) {
+    return String(Math.floor(n * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
+  $.getJSON('https://gw.alipayobjects.com/os/antvdemo/assets/data/f2/steps.json', function(data) {
+    var originDates = [];
+    var originSteps = [];
+    var firstDayArr = [];
+    data.forEach(function(obj) {
+      if (obj.date >= '2018-05-01') {
+        originDates.push(obj.date);
+        originSteps.push(obj.steps);
+      }
+
+      if (obj.first) {
+        firstDayArr.push(obj);
+      }
+    });
+
+    var chart = new F2.Chart({
+      id: 'mountNode',
+      pixelRatio: window.devicePixelRatio
+    });
+
+    chart.source(data, {
+      date: {
+        type: 'timeCat',
+        tickCount: 5,
+        values: originDates,
+        mask: 'MM-DD'
+      },
+      steps: {
+        tickCount: 5
+      }
+    });
+
+    chart.axis('date', {
+      tickLine: {
+        length: 4,
+        stroke: '#cacaca'
+      },
+      label: {
+        fill: '#cacaca'
+      },
+      line: {
+        top: true
+      }
+    });
+    chart.axis('steps', {
+      position: 'right',
+      label: function label(text) {
+        return {
+          text: formatNumber(text * 1),
+          fill: '#cacaca'
+        };
+      },
+
+      grid: {
+        stroke: '#d1d1d1'
+      }
+    });
+    chart.tooltip({
+      showItemMarker: false,
+      background: {
+        radius: 2,
+        padding: [3, 5]
+      },
+      onShow: function onShow(ev) {
+        var items = ev.items;
+        items[0].name = '';
+        items[0].value = items[0].value + ' 步';
+      }
+    });
+    chart.interval().position('date*steps').style({
+      radius: [2, 2, 0, 0]
+    });
+
+    firstDayArr.forEach(function(obj) {
+      chart.guide().line({
+        top: false,
+        start: [obj.date, 'min'],
+        end: [obj.date, 'max'],
+        style: {
+          lineWidth: 1,
+          stroke: '#A4A4A4'
+        }
+      });
+      chart.guide().text({
+        position: [obj.date, 'max'],
+        content: moment(obj.date).format('YYYY-MM'),
+        style: {
+          textAlign: 'start',
+          fill: '#cacaca',
+          textBaseline: 'top'
+        },
+        offsetX: 5,
+        offsetY: 5
+      });
+    });
+    // 定义进度条
+    chart.scrollBar({
+      mode: 'x',
+      xStyle: {
+        backgroundColor: '#e8e8e8',
+        fillerColor: '#808080',
+        offsetY: -2
+      }
+    });
+    chart.interaction('pan');
+    chart.render();
+  });
+</script>
+
+
+</body>
+</html>

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-06-03 09:04:52
+ * @LastEditTime: 2020-06-11 11:12:02
+ * @LastEditors: your name
+ * @Description: In User Settings Edit
+ * @FilePath: \demo\src\routers\index.js
+ */
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 // import store from '@stores/index'
